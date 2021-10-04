@@ -16,8 +16,11 @@ public class GameManager : MonoBehaviour
     private int notesCount = 0;
 
     private AudioSource audioSource;
+    public AudioSource tapSound;
     private float startTime = 0;
     public float timeOffset = -1;
+    public GameObject judgeLine;
+    private float lineY;
 
     private bool isPlaying = false;
     public GameObject startButton;
@@ -25,12 +28,16 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     private int score = 0;
 
+    public float highSpeed;
+
     void Start()
     {
         audioSource = GameObject.Find("GameMusic").GetComponent<AudioSource>();
         timing = new float[1024];
         lane = new int[1024];
         LoadCSV();
+        lineY = judgeLine.gameObject.transform.position.y;
+        Debug.Log(lineY); // for debug
     }
 
     void Update()
@@ -77,7 +84,7 @@ public class GameManager : MonoBehaviour
 
     void SpawnNotes(int num)  // numレーンにノーツを生成
     {
-        Instantiate(notes[num], new Vector3(-6.0f + (4.0f*num), 10.0f, 0), Quaternion.identity);
+        Instantiate(notes[num], new Vector3(-6.0f + (4.0f*num), highSpeed + lineY, 0), Quaternion.identity);
         // 0:-6  1:-2  2:2  3: 6
     }
 
@@ -86,7 +93,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoodTimingFunc(int num){ // ノーツが叩かれた時に呼ばれる処理
-        Debug.Log("Lane:" + num + "good");
+        Debug.Log("Lane:" + num + " good");
         Debug.Log(GetMusicTime());
         score++;
     }

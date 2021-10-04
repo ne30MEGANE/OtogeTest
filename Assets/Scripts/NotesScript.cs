@@ -6,7 +6,8 @@ public class NotesScript : MonoBehaviour
 {
 
     public int laneNum;
-    public int highSpeed;
+    private float highSpeed;
+    private AudioSource tapSound;
     private GameManager gameManager;
     private bool isInLine = false; // good判定範囲かどうか
     private KeyCode laneKey;
@@ -14,10 +15,12 @@ public class NotesScript : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        highSpeed = gameManager.highSpeed;
+        tapSound = gameManager.tapSound;
         laneKey = GameUtil.GetKeyCodeByLineNum(laneNum);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // ノーツを落とす処理
         this.transform.position += Vector3.down * highSpeed * Time.deltaTime;
@@ -26,30 +29,39 @@ public class NotesScript : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+    }
+    void Update()
+    {
         // 判定範囲に入っているとき
         if(isInLine){
             CheckInput(laneKey); // レーン番号確認
         }
+
     }
 
     void CheckInput(KeyCode key)
     {
         //　ノーツに対して入力があったとき
         if(Input.GetKeyDown(key)){
-            Debug.Log("CheckInput"); // for debug
+            // Debug.Log("CheckInput"); // for debug
             gameManager.GoodTimingFunc(laneNum); // 判定関数を呼び出す
+            tapSound.Play();
             Destroy(this.gameObject); // ノーツを消す
         }
     }
 
-    void OnTriggerEnter2D (Collider2D other) { // 判定範囲内の時
-        isInLine = true;
-        Debug.Log(isInLine); // for debug
+    void OnTriggerEnter2D (Collider2D cl) { // 判定範囲内の時
+        if(cl.gameObject.tag == "Area"){
+            isInLine = true;
+            Debug.Log(isInLine); // for debug
+        }
     }
 
-    void OnTriggerExit2D (Collider2D other) { // 判定範囲外の時
-        isInLine = false;
-        Debug.Log(isInLine); // for debug
+    void OnTriggerExit2D (Collider2D cl) { // 判定範囲外の時
+        if(cl.gameObject.tag == "Area"){
+            isInLine = false;
+            Debug.Log(isInLine); // for debug
+        }
     }
 
 }
