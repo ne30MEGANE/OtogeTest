@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
     private float lineY;
 
     private bool isPlaying = false;
-    public GameObject startButton;
 
     public Text scoreText;
     private int score = 0;
@@ -38,6 +37,7 @@ public class GameManager : MonoBehaviour
         LoadCSV();
         lineY = judgeLine.gameObject.transform.position.y;
         // Debug.Log(lineY); // for debug
+        Invoke(nameof(StartGame), 1f); // 1秒後にスタート
     }
 
     void Update()
@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        startButton.SetActive(false); // スタートボタンを非表示
         startTime = Time.time; // 曲開始時の時刻
         audioSource.Play();
         isPlaying = true;
