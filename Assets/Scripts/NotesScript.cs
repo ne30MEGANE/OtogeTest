@@ -12,9 +12,13 @@ public class NotesScript : MonoBehaviour
     private bool isInLine = false; // good判定範囲かどうか
     private KeyCode laneKey;
 
+    // タッチ判定関係
+    public GameObject lane;
+
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        // lane = GameObject.Find("lane" + laneNum.ToString()); // 入力対象レーンを指定
         highSpeed = gameManager.highSpeed;
         tapSound = gameManager.tapSound;
         laneKey = GameUtil.GetKeyCodeByLineNum(laneNum);
@@ -41,13 +45,18 @@ public class NotesScript : MonoBehaviour
 
     void CheckInput(KeyCode key)
     {
-        //　ノーツに対して入力があったとき
+        // ノーツに対して入力があったとき（キー入力）
         if(Input.GetKeyDown(key)){
             // Debug.Log("CheckInput"); // for debug
             gameManager.GoodTimingFunc(laneNum); // 判定関数を呼び出す
             tapSound.Play();
             Destroy(this.gameObject); // ノーツを消す
         }
+
+        // ノーツに対して入力があったとき（タッチ）
+        // if(){
+            
+        // }
     }
 
     void OnTriggerEnter2D (Collider2D cl) { // 判定範囲内の時

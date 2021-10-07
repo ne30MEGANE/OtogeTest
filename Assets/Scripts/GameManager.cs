@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         lane = new int[1024];
         LoadCSV();
         lineY = judgeLine.gameObject.transform.position.y;
-        Debug.Log(lineY); // for debug
+        // Debug.Log(lineY); // for debug
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     void LoadCSV() // 譜面ファイル解釈
     {
         TextAsset csv = Resources.Load(filePass) as TextAsset;
-        Debug.Log(csv.text); // for debug
+        // Debug.Log(csv.text); // for debug
         StringReader reader = new StringReader(csv.text);
 
         int i = 0;
