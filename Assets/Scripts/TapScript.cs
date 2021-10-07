@@ -20,13 +20,13 @@ public class TapScript : MonoBehaviour
 
     public void TapDown(int lane){ // レーンがタップされたとき
         touching[lane] = true;
-        Debug.Log("lane:" + lane + " on");
+        // Debug.Log("lane:" + lane + " on"); // for debug
     }
 
     public void TapUp(int lane){ // レーンから手が離れた時
         if(touching[lane]) {
             touching[lane] = false;
-            Debug.Log("lane:" + lane + " off");
+            // Debug.Log("lane:" + lane + " off"); // for debug
         }
     }
 
