@@ -72,3 +72,5 @@ crashlytics-build.properties
 
 /Assets/Resources/*.wav
 /Assets/Resources/*.wav.meta
+
+/TestBuild*
