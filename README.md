@@ -4,6 +4,7 @@
 音ゲーシステム部分
 - https://qiita.com/Teach/items/12a2e3b2f8c09dbbc5bd
 - https://qiita.com/Teach/items/e8343fe0405da7ebd5fc
+
 加速度センサー処理部分
 - https://resocoder.com/2018/07/20/shake-detecion-for-mobile-devices-in-unity-android-ios/
 
