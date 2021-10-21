@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class NotesScript : MonoBehaviour
 {
-
+    public int type;
     public int laneNum;
     private float highSpeed;
+
     private AudioSource tapSound;
     private GameManager gameManager;
     private TapScript tapScript;
+    private ShakeScript shakeScript;
+
     private bool isInLine = false; // good判定範囲かどうか
     private KeyCode laneKey;
 
@@ -17,6 +20,7 @@ public class NotesScript : MonoBehaviour
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         tapScript = GameObject.Find("TapManager").GetComponent<TapScript>();
+        shakeScript = GameObject.Find("ShakeManager").GetComponent<ShakeScript>();
         highSpeed = gameManager.highSpeed;
         tapSound = gameManager.tapSound;
         laneKey = GameUtil.GetKeyCodeByLineNum(laneNum);
@@ -43,18 +47,26 @@ public class NotesScript : MonoBehaviour
 
     void CheckInput(KeyCode key)
     {
-        // ノーツに対して入力があったとき（キー入力）
-        if(Input.GetKeyDown(key) || tapScript.GetLaneBool(laneNum)){
-            // Debug.Log("CheckInput"); // for debug
-            gameManager.GoodTimingFunc(laneNum); // 判定関数を呼び出す
-            tapSound.Play();
-            Destroy(this.gameObject); // ノーツを消す
+        switch(type){
+            case 0: // 通常ノーツの判定
+                if(Input.GetKeyDown(key) || tapScript.GetLaneBool(laneNum)){
+                    gameManager.GoodTimingFunc(); // 判定関数を呼び出す
+                    tapSound.Play();
+                    Destroy(this.gameObject); // ノーツを消す
+                }
+                break;
+            case 1: // シェイクノーツの判定
+                if(shakeScript.GetShakeBool()){
+                    gameManager.GoodTimingFunc();
+                    tapSound.Play();
+                    Destroy(this.gameObject);
+                }
+                break;
+            default:
+                break;
         }
+        
 
-        // ノーツに対して入力があったとき（タッチ）
-        // if(tapScript.GetLaneBool(laneNum)){
-        //     Debug.Log(laneNum + " tap");
-        // }
     }
 
     void OnTriggerEnter2D (Collider2D cl) { // 判定範囲内の時
