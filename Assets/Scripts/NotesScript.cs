@@ -26,7 +26,7 @@ public class NotesScript : MonoBehaviour
         laneKey = GameUtil.GetKeyCodeByLineNum(laneNum);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         // ノーツを落とす処理
         this.transform.position += Vector3.down * highSpeed * Time.deltaTime;
@@ -35,9 +35,6 @@ public class NotesScript : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-    }
-    void Update()
-    {
         // 判定範囲に入っているとき
         if(isInLine){
             CheckInput(laneKey); // レーン番号確認
