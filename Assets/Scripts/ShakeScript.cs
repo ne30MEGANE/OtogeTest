@@ -4,32 +4,28 @@ using UnityEngine;
 
 public class ShakeScript : MonoBehaviour
 {
-    public float ShakeDetectionThreshold; // Threshold = しきい値、　シェイク判定される基準になるふり幅
-    public float MinShakeInterval; // 次のシェイクを判定するまでのインターバル
+    public float Threshold0, Threshold1; // 0:自由方向シェイクのしきい値、1:方向指定シェイクのしきい値
+    private float sqrThreshold0, sqrThreshold1;
 
-    private float sqrShakeDetectionthreshold;
-    private float timeSinceLastShake;
+    public float XdirThrehold; // 左右方向判定のしきい値
 
     private bool shake;
 
     // Start is called before the first frame update
     void Start()
     {
-        sqrShakeDetectionthreshold = Mathf.Pow(ShakeDetectionThreshold, 2);
+        sqrThreshold0 = Mathf.Pow(Threshold0, 2);
+        sqrThreshold1 = Mathf.Pow(Threshold1, 2);
         shake = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.acceleration.sqrMagnitude >= sqrShakeDetectionthreshold
-        && Time.unscaledTime >= timeSinceLastShake + MinShakeInterval && !shake){
-            ShakeFlagSwitch();
-            timeSinceLastShake = Time.unscaledTime; // 最後にシェイク判定された時間を記録
-        }
+    public bool GetShakeBool(){ // 自由方向シェイク判定用
+        JudgeShake();
+        return shake;
     }
 
-    public bool GetShakeBool(){
+    public bool GetShakeBool(int dir){ // 方向指定シェイク判定用
+        JudgeShake(dir);
         return shake;
     }
 
@@ -40,5 +36,34 @@ public class ShakeScript : MonoBehaviour
 
     private void ShakeFlagDown(){
         shake = false;
+    }
+
+    private void JudgeShake(){ // 自由方向シェイク用 判定本体
+        Vector3 dir = Input.acceleration;
+        if(dir.sqrMagnitude >= sqrThreshold0 && !shake){
+            ShakeFlagSwitch();
+        }
+    }
+
+    private void JudgeShake(int JudgeType){ // 方向指定シェイク用 判定本体
+        Vector3 dir = Input.acceleration;
+        switch(JudgeType){
+            case 0: // 方向指定判定(左)
+                if(dir.x > XdirThrehold){
+                    if(dir.sqrMagnitude >= sqrThreshold1 && !shake){
+                        ShakeFlagSwitch();
+                    }
+                }
+                break;
+            case 1: // 方向指定判定(右)
+                if(dir.x < Mathf.Abs(XdirThrehold)){
+                    if(dir.sqrMagnitude >= sqrThreshold1 && !shake){
+                        ShakeFlagSwitch();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
