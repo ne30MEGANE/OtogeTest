@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] notes;
+    public GameObject[] notes; // 0:通常ノーツ 1:シェイク(自由方向) 2:左シェイク 3:右シェイク
+    private int[] type, option;
     private float[] timing;
-    private int[] lane;
 
     public string filePass;
     private int notesCount = 0;
@@ -32,8 +32,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         audioSource = GameObject.Find("GameMusic").GetComponent<AudioSource>();
+        type = new int[1024];
         timing = new float[1024];
-        lane = new int[1024];
+        option = new int[1024];
         LoadCSV();
         lineY = judgeLine.gameObject.transform.position.y;
         // Debug.Log(lineY); // for debug
@@ -66,8 +67,9 @@ public class GameManager : MonoBehaviour
             string line = reader.ReadLine();
             string[] values = line.Split(',');
             for (int j = 0; j < values.Length; j++){
-                timing[i] = float.Parse(values[0]);
-                lane[i] = int.Parse(values[1]);
+                type[i] = int.Parse(values[0]);
+                timing[i] = float.Parse(values[1]);
+                option[i] = int.Parse(values[2]);
             }
             i++;
         }
@@ -76,24 +78,42 @@ public class GameManager : MonoBehaviour
     void CheckNextNotes()
     {
         while(timing[notesCount] + timeOffset < GetMusicTime() && timing[notesCount] != 0){
-            SpawnNotes(lane[notesCount]);
+            SpawnNotes(type[notesCount], option[notesCount]);
             notesCount++;
         }
     }
 
-    void SpawnNotes(int num)  // numレーンにノーツを生成
+    void SpawnNotes(int type, int opt)  // numレーンにノーツを生成
     {
-        Instantiate(notes[num], new Vector3(-6.0f + (4.0f*num), highSpeed + lineY, 0), Quaternion.identity);
-        // 0:-6  1:-2  2:2  3: 6
+        switch(type){
+            case 0: // 通常ノーツ opt:レーン番号
+                GameObject note =  Instantiate(notes[0], new Vector3(-6.0f + (4.0f*opt), highSpeed + lineY, 0), Quaternion.identity);
+                // 0:-6  1:-2  2:2  3: 6
+                note.GetComponent<NotesScript>().optNum = opt; // レーン番号をノーツにセット
+                break;
+            case 1: // シェイクノーツ(自由方向) opt:無視
+                Instantiate(notes[1], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                break;
+            case 2: // シェイクノーツ(指定方向) opt:シェイク方向
+                if(opt == 0){ //左シェイク
+                    Instantiate(notes[2], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                }else if(opt == 1){ // 右シェイク
+                    Instantiate(notes[3], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                }
+                break;
+            default:
+                break;
+        }
+        
     }
 
     float GetMusicTime(){
         return Time.time - startTime; // 現在時刻から曲開始時刻の差分＝曲が流れ始めてからの経過時間
     }
 
-    public void GoodTimingFunc(int num){ // ノーツが叩かれた時に呼ばれる処理
-        Debug.Log("Lane:" + num + " good");
-        Debug.Log(GetMusicTime());
+    public void GoodTimingFunc(){ // ノーツが叩かれた時に呼ばれる処理
+        // Debug.Log("Lane:" + num + " good"); // for debug
+        // Debug.Log(GetMusicTime()); // for debug
         score++;
     }
 }
