@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7778613285063288260}
   - component: {fileID: -2740456413433461204}
   m_Layer: 0
-  m_Name: Notes0
+  m_Name: tap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  laneNum: 0
+  optNum: 0
 --- !u!50 &-2740456413433461204
 Rigidbody2D:
   serializedVersion: 4
