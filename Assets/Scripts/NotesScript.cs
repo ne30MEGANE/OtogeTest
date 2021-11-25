@@ -20,7 +20,7 @@ public class NotesScript : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         tapScript = GameObject.Find("TapManager").GetComponent<TapScript>();
         shakeScript = GameObject.Find("ShakeManager").GetComponent<ShakeScript>();
-        highSpeed = gameManager.highSpeed;
+        highSpeed = GameManager.highSpeed;
         tapSound = gameManager.tapSound;
     }
 

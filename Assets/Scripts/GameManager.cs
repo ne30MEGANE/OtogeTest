@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private int[] type, option;
     private float[] timing;
 
-    public string filePass;
+    public static string filePass;
     private int notesCount = 0;
 
     private AudioSource audioSource;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     private int score = 0;
 
-    public float highSpeed;
+    public static float highSpeed;
 
     void Start()
     {
