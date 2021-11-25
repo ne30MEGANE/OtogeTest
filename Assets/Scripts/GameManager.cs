@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] notes; // 0~3:通常ノーツ 4:シェイク(自由方向) 5:左シェイク 6:右シェイク
+    public GameObject[] notes; // 0:通常ノーツ 1:シェイク(自由方向) 2:左シェイク 3:右シェイク
     private int[] type, option;
     private float[] timing;
 
@@ -87,17 +87,18 @@ public class GameManager : MonoBehaviour
     {
         switch(type){
             case 0: // 通常ノーツ opt:レーン番号
-                Instantiate(notes[opt], new Vector3(-6.0f + (4.0f*opt), highSpeed + lineY, 0), Quaternion.identity);
+                GameObject note =  Instantiate(notes[0], new Vector3(-6.0f + (4.0f*opt), highSpeed + lineY, 0), Quaternion.identity);
                 // 0:-6  1:-2  2:2  3: 6
+                note.GetComponent<NotesScript>().optNum = opt; // レーン番号をノーツにセット
                 break;
             case 1: // シェイクノーツ(自由方向) opt:無視
-                Instantiate(notes[4], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                Instantiate(notes[1], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
                 break;
             case 2: // シェイクノーツ(指定方向) opt:シェイク方向
                 if(opt == 0){ //左シェイク
-                    Instantiate(notes[5], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                    Instantiate(notes[2], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
                 }else if(opt == 1){ // 右シェイク
-                    Instantiate(notes[6], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
+                    Instantiate(notes[3], new Vector3(0, highSpeed + lineY, 0), Quaternion.identity);
                 }
                 break;
             default:
